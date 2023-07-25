@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GC : MonoBehaviour
 {
@@ -9,11 +11,23 @@ public class GC : MonoBehaviour
     public Gerador gerador;
     private int score;
     public TextMeshProUGUI scoreLabel;
+    private static GC instance;
+    public GameObject TelaGameOver;
+    public GameObject BG;
+    public GameObject Gerador;
+    public GameObject ground;
+    public GameObject GameManager;
+    public static GC Instance => instance;
+    private bool gameOver;
+    
     // Start is called before the first frame update
     void Start()
     {
-        isGameRunning = false;
-        GameStart();
+        instance = this;
+        isGameRunning = true;
+        gerador.GerarObstaculos();
+        score = 0;
+
     }
 
     private void Update()
@@ -21,18 +35,22 @@ public class GC : MonoBehaviour
         scoreLabel.text = score.ToString();
         if (!isGameRunning) return;
         score++;
+        if(gameOver) 
+            return; 
     }
-    void GameStart() 
-    {
-       isGameRunning = true;
-        gerador.GerarObstaculos();
-        score = 0;
-    }
+    
 
-    public void GameOver() 
+    public void GameOver()
     {
+        gameOver = true;
         print("Fim de jogo");
-       isGameRunning = false;
+        isGameRunning = false;
         gerador.PararGerador();
+        TelaGameOver.SetActive(true);
+        BG.SetActive(false);
+        Gerador.SetActive(false);
+        ground.SetActive(false);
+        GameManager.SetActive(false);
     }
+    
 }

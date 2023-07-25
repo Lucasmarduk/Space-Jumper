@@ -40,6 +40,9 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "obstaculo") 
         {
             OnPlayerHitted.Invoke();
+            gameObject.SetActive(false);
+            GC.Instance.GameOver();
+            
         }
       canJump= true;
     }
